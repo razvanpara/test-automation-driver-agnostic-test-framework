@@ -13,8 +13,8 @@ namespace Agnostic.Project
         }
 
         //elements
-        private Locator TextInput => LocatorFactory.Id("myTextInput");
-        private Locator TextAreaInput => LocatorFactory.Id("textareaName");
+        private Locator TextInput => LocatorFactory.Css("#myTextInput");
+        private Locator TextAreaInput => LocatorFactory.Css("#textareaName");
         private Locator SelectDropdown => LocatorFactory.Css("#mySelect");
 
 

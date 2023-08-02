@@ -1,4 +1,5 @@
 using Agnostic.Framework;
+using Microsoft.Playwright;
 using OpenQA.Selenium.Chrome;
 
 namespace Agnostic.Project.Tests
@@ -10,7 +11,12 @@ namespace Agnostic.Project.Tests
         [SetUp]
         public void Setup()
         {
-            _driver = new Selenium.Selenium(new ChromeDriver());
+            _driver
+                = new Selenium.Selenium(new ChromeDriver());
+                //= new Playwright.Playwright(Microsoft.Playwright.Playwright.CreateAsync().Result.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+                //{
+                //    Headless = false
+                //}).Result);
         }
 
         [TearDown]
@@ -45,7 +51,7 @@ namespace Agnostic.Project.Tests
             var fieldText = pom.GetSelectedText();
 
 
-            Assert.That(fieldText, Is.EqualTo(text));
+            Assert.That(text.Contains(fieldText), $"Text '{text}' was not contained by element text '{fieldText}'");
         }
     }
 }

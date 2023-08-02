@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Agnostic.Playwright\Agnostic.Playwright.csproj" />
     <ProjectReference Include="..\Agnostic.Project\Agnostic.Project.csproj" />
     <ProjectReference Include="..\Agnostic.Selenium\Agnostic.Selenium.csproj" />
   </ItemGroup>
