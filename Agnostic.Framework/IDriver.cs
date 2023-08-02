@@ -12,7 +12,7 @@
         void Click(Locator element);
         void SelectValue(Locator element, string value);
         void SelectIndex(Locator element, int index);
-
+        string GetSelectedText(Locator element);
         void DragAndDrop(Locator element, Locator target);
 
         void WaitFor(Locator element, TimeSpan timeout);

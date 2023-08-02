@@ -59,5 +59,7 @@ namespace Agnostic.Selenium
             });
             wait.Until(ExpectedConditions.ElementExists(element.GetBy()));
         }
+
+        public string GetSelectedText(Locator element) => GetSelect(element).SelectedOption.Text;
     }
 }
