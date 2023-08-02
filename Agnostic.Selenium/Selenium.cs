@@ -26,6 +26,9 @@ namespace Agnostic.Selenium
 
         public string GetText(Locator element) => _driver.FindElement(element.GetBy()).Text;
 
+        public string GetAttribute(Locator element, string attribute) => _driver.FindElement(element.GetBy()).GetAttribute(attribute);
+
+
         public string GetUrl() => _driver.Url;
 
         public void GoToUrl(string url) => _driver.Navigate().GoToUrl(url);
@@ -61,5 +64,11 @@ namespace Agnostic.Selenium
         }
 
         public string GetSelectedText(Locator element) => GetSelect(element).SelectedOption.Text;
+
+        public void Dispose()
+        {
+            _driver.Quit();
+        }
+
     }
 }

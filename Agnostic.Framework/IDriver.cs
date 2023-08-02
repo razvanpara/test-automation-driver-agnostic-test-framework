@@ -1,14 +1,14 @@
 ﻿namespace Agnostic.Framework
 {
 
-    public interface IDriver
+    public interface IDriver : IDisposable
     {
         void GoToUrl(string url);
         string GetUrl();
 
         void EnterText(Locator element, string text);
         string GetText(Locator element);
-
+        string GetAttribute(Locator element, string attribute);
         void Click(Locator element);
         void SelectValue(Locator element, string value);
         void SelectIndex(Locator element, int index);
