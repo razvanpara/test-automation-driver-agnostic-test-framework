@@ -22,7 +22,11 @@ namespace Agnostic.Playwright
 
         public void Dispose() => _browser.CloseAsync().Wait();
 
-        public void DragAndDrop(Locator element, Locator target) => _page.DragAndDropAsync(element.GetSelector(), target.Value);
+        public void DragAndDrop(Locator element, Locator target)
+        {
+            _page.DragAndDropAsync(element.GetSelector(), target.GetSelector());
+            WaitFor(null, TimeSpan.FromMilliseconds(250));
+        }
 
         public void EnterText(Locator element, string text) => _page.Locator(element.GetSelector()).TypeAsync(text).Wait();
 
