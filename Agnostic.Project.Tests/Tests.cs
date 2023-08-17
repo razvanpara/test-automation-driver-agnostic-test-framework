@@ -87,5 +87,21 @@ namespace Agnostic.Project.Tests
 
             Assert.That(pom.GetButtonColor(), Contains.Substring(colorAfter));
         }
+
+        [TestCaseSource(nameof(Strategies))]
+        public void DragAndDropTest(Type type)
+        {
+            var pom = new PomClass(_driver);
+            pom.GoToPage();
+
+            pom.ClickCheckbox();
+
+            var (initX, initY) = pom.GetDragableElementCoords();
+
+            pom.DragToRight();
+            var (newX, newY) = pom.GetDragableElementCoords();
+
+            Assert.That(int.Parse(newX) > int.Parse(initX));
+        }
     }
 }
