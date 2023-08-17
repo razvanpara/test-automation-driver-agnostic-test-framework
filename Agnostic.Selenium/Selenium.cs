@@ -3,6 +3,8 @@ using Agnostic.Framework;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using OpenQA.Selenium.Interactions;
+using static System.Net.Mime.MediaTypeNames;
+using System.Linq.Expressions;
 
 namespace Agnostic.Selenium
 {
@@ -14,7 +16,7 @@ namespace Agnostic.Selenium
         {
             _driver = driver;
         }
-        public void Click(Locator element) => _driver.FindElement(element.GetBy());
+        public void Click(Locator element) => _driver.FindElement(element.GetBy()).Click();
 
         public void DragAndDrop(Locator element, Locator target) =>
             new Actions(_driver).DragAndDrop(
@@ -26,7 +28,14 @@ namespace Agnostic.Selenium
 
         public string GetText(Locator element) => _driver.FindElement(element.GetBy()).Text;
 
-        public string GetAttribute(Locator element, string attribute) => _driver.FindElement(element.GetBy()).GetAttribute(attribute);
+        public string GetAttribute(Locator element, string attribute)
+        {
+            var executor = ((IJavaScriptExecutor)_driver);
+            var selector = element.GetBy();
+            var expr = $"return arguments[0].{attribute};";
+            var result = executor.ExecuteScript(expr, _driver.FindElement(selector));
+            return result.ToString();
+        }
 
 
         public string GetUrl() => _driver.Url;
