@@ -101,7 +101,7 @@ namespace Agnostic.Project.Tests
             pom.DragToRight();
             var (newX, newY) = pom.GetDragableElementCoords();
 
-            Assert.That(int.Parse(newX) > int.Parse(initX));
+            Assert.That(int.Parse(newX), Is.GreaterThan(int.Parse(initX)));
         }
     }
 }
