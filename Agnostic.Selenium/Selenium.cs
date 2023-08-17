@@ -18,11 +18,71 @@ namespace Agnostic.Selenium
         }
         public void Click(Locator element) => _driver.FindElement(element.GetBy()).Click();
 
-        public void DragAndDrop(Locator element, Locator target) =>
-            new Actions(_driver).DragAndDrop(
-                _driver.FindElement(element.GetBy()),
-                _driver.FindElement(target.GetBy())
-                );
+        public void DragAndDrop(Locator element, Locator target)
+        {
+            var dragAndDropScript = @"
+function simulateDragDrop(sourceNode, destinationNode) {
+    var EVENT_TYPES = {
+        DRAG_END: 'dragend',
+        DRAG_START: 'dragstart',
+        DROP: 'drop'
+    }
+
+    function createCustomEvent(type) {
+        var event = new CustomEvent(""CustomEvent"")
+        event.initCustomEvent(type, true, true, null)
+        event.dataTransfer = {
+            data: {
+            },
+            setData: function(type, val) {
+                this.data[type] = val
+            },
+            getData: function(type) {
+                return this.data[type]
+            }
+        }
+        return event
+    }
+
+    function dispatchEvent(node, type, event) {
+        if (node.dispatchEvent) {
+            return node.dispatchEvent(event)
+        }
+        if (node.fireEvent) {
+            return node.fireEvent(""on"" + type, event)
+        }
+    }
+
+    var event = createCustomEvent(EVENT_TYPES.DRAG_START)
+    dispatchEvent(sourceNode, EVENT_TYPES.DRAG_START, event)
+
+    var dropEvent = createCustomEvent(EVENT_TYPES.DROP)
+    dropEvent.dataTransfer = event.dataTransfer
+    dispatchEvent(destinationNode, EVENT_TYPES.DROP, dropEvent)
+
+    var dragEndEvent = createCustomEvent(EVENT_TYPES.DRAG_END)
+    dragEndEvent.dataTransfer = event.dataTransfer
+    dispatchEvent(sourceNode, EVENT_TYPES.DRAG_END, dragEndEvent)
+}
+    simulateDragDrop(arguments[0], arguments[1]);
+";
+
+            var src = _driver.FindElement(element.GetBy());
+            var trg = _driver.FindElement(target.GetBy());
+
+            // selenium bug https://github.com/w3c/webdriver/issues/1488
+            //var srcMid = GetMiddleCoords(src.Location, src.Size);
+            //var trgMid = GetMiddleCoords(trg.Location, trg.Size);
+            //new Actions(_driver)
+            //    .MoveToElement(src)
+            //    .ClickAndHold()
+            //    .MoveToElement(trg)
+            //    .Release()
+            //    .DragAndDrop(src, trg)
+            //    .Build()
+            //    .Perform();
+            ((IJavaScriptExecutor)_driver).ExecuteScript(dragAndDropScript, src, trg);
+        }
 
         public void EnterText(Locator element, string text) => _driver.FindElement(element.GetBy()).SendKeys(text);
 
@@ -36,7 +96,6 @@ namespace Agnostic.Selenium
             var result = executor.ExecuteScript(expr, _driver.FindElement(selector));
             return result.ToString();
         }
-
 
         public string GetUrl() => _driver.Url;
 
