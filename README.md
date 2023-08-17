@@ -9,7 +9,7 @@
 
 
 
-##Test cases:
+## Test cases:
 All test cases are using [selenium base demo page](https://seleniumbase.io/demo_page) as the application under test
 
 ###Tests:
